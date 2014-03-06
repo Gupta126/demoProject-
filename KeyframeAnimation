@@ -1,0 +1,141 @@
+package com.example.android.keyframeanimation;
+
+import java.util.Random;
+
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextPaint;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+
+/**
+ * This example shows how to use AnimationDrawable to construct a keyframe
+ * animation where each frame is shown for a specified duration.
+ * 
+ * Watch the associated video for this demo on the DevBytes channel of
+ * developer.android.com or on YouTube at
+ * https://www.youtube.com/watch?v=V3ksidLf7vA.
+ */
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class KeyframeAnimation extends Activity implements OnTouchListener {
+
+	ImageView imageview;
+	AnimationDrawable animationDrawable;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_keyframe_animation);
+
+		imageview = (ImageView) findViewById(R.id.imageview);
+
+		// Create the AnimationDrawable in which we will store all frames of the
+		// animation
+		animationDrawable = new AnimationDrawable();
+
+		animationDrawable.addFrame(
+				getResources().getDrawable(R.drawable.bingo_nw1), 0);
+
+		// Run until we say stop
+		animationDrawable.setOneShot(false);
+
+		imageview.setImageDrawable(animationDrawable);
+
+		imageview.setOnTouchListener(this);
+
+	}
+
+	protected void setBack() {
+		// TODO Auto-generated method stub
+		int num = 18;
+		Random rand = new Random();
+		int ran = rand.nextInt(num) + 9;
+
+	}
+
+	@Override
+	public boolean onTouch(View arg0, MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+			animationDrawable = new AnimationDrawable();
+
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw2), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw3), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw4), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw5), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw6), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw7), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw8), 200);
+			animationDrawable.addFrame(
+					getResources().getDrawable(R.drawable.bingo_nw9), 200);
+
+			imageview.setImageDrawable(animationDrawable);
+			animationDrawable.start();
+
+			Handler mHandler = new Handler();
+
+			mHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+
+					imageview.setImageBitmap(setDrawble());
+				}
+
+			}, 4000);
+			return true;
+		}
+		return false;
+	}
+
+	public Bitmap setDrawble() {
+
+		Bitmap bm = BitmapFactory.decodeResource(getResources(),
+				R.drawable.result_1);
+
+		Bitmap bm1 = Bitmap.createScaledBitmap(bm, imageview.getWidth(),
+				imageview.getHeight(), true);
+		Canvas canvas = new Canvas(bm1);
+
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setColor(Color.BLACK);
+		paint.setTextSize(14);// Text Color
+		paint.setStrokeWidth(10); // Text Size
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)); // Text
+																				// Overlapping
+																				// Pattern
+		// some more settings...
+
+		canvas.drawBitmap(bm1, 0, 0, paint);
+		canvas.drawText("100", 240, 150, paint);
+
+		// temp.setBounds(100, 100, canvas.getWidth(), canvas.getHeight());
+		// temp.draw(canvas);
+
+		return bm1;
+	}
+}
